@@ -45,6 +45,7 @@ class BeeHoney extends FlameGame with KeyboardEvents {
     bg.move(dt, 100, 900, 0.0);
     bg2.move(dt, 100, 0, -900.0);
     bee.move(dt, 10);
+    bee.animation();
     super.update(dt);
   }
 
@@ -75,7 +76,8 @@ class Bg extends SpriteComponent {
 class Bee extends SpriteComponent {
   bool right = false;
   bool left = false;
-
+  int timer = 0;
+  int img = 1;
   move(dt, speed) {
     if (right) {
       if (x <= 475) {
@@ -87,5 +89,17 @@ class Bee extends SpriteComponent {
         x -= speed;
       }
     }
+  }
+
+  animation() async {
+    timer += 1;
+    if (timer > 8) {
+      timer = 1;
+      img += 1;
+    }
+    if (img > 4) {
+      img = 1;
+    }
+    sprite = await Sprite.load("bee$img.png");
   }
 }
