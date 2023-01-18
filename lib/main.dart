@@ -13,6 +13,7 @@ class BeeHoney extends FlameGame with KeyboardEvents {
   Bg bg = Bg();
   Bg bg2 = Bg();
   Bee bee = Bee();
+  Spider spider = Spider();
   @override
   Future<void>? onLoad() async {
     bg
@@ -36,6 +37,13 @@ class BeeHoney extends FlameGame with KeyboardEvents {
       ..anchor = Anchor.center; // Define ela no ponto central
 
     add(bee);
+    spider
+      ..sprite = await Sprite.load("spider1.png")
+      ..size = Vector2.all(80)
+      ..position = Vector2(250, 500)
+      ..anchor = Anchor.center;
+
+    add(spider);
     return super.onLoad();
   }
 
@@ -44,8 +52,13 @@ class BeeHoney extends FlameGame with KeyboardEvents {
     //delta time- independente do nivel de processamento
     bg.move(dt, 100, 900, 0.0);
     bg2.move(dt, 100, 0, -900.0);
+
     bee.move(dt, 10);
-    bee.animation();
+    bee.animation(8, 4, 'bee');
+
+    spider.animation(8, 4, 'spider');
+    spider.move(dt, bee);
+
     super.update(dt);
   }
 
@@ -64,6 +77,23 @@ class BeeHoney extends FlameGame with KeyboardEvents {
   }
 }
 
+class Obj extends SpriteComponent {
+  int timer = 0;
+  int img = 1;
+  String name = "";
+  animation(time, spritelimit, name) async {
+    timer += 1;
+    if (timer > time) {
+      timer = 1;
+      img += 1;
+    }
+    if (img > spritelimit) {
+      img = 1;
+    }
+    sprite = await Sprite.load("$name$img.png");
+  }
+}
+
 class Bg extends SpriteComponent {
   move(dt, speed, limit, posy) {
     y += speed * dt; //Pega posicao eixo y adiciona 1
@@ -73,11 +103,9 @@ class Bg extends SpriteComponent {
   }
 }
 
-class Bee extends SpriteComponent {
+class Bee extends Obj {
   bool right = false;
   bool left = false;
-  int timer = 0;
-  int img = 1;
   move(dt, speed) {
     if (right) {
       if (x <= 475) {
@@ -90,16 +118,19 @@ class Bee extends SpriteComponent {
       }
     }
   }
+}
 
-  animation() async {
-    timer += 1;
-    if (timer > 8) {
-      timer = 1;
-      img += 1;
+class Spider extends Obj {
+  move(dt, bee) {
+    y += 100 * dt;
+    if (y > 950) {
+      y = -50;
     }
-    if (img > 4) {
-      img = 1;
+
+    if (x < bee.x) {
+      x += 2;
+    } else if (x > bee.x) {
+      x -= 2;
     }
-    sprite = await Sprite.load("bee$img.png");
   }
 }
