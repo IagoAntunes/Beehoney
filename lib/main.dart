@@ -1,9 +1,11 @@
 import 'dart:ffi';
 import 'dart:math';
 
+import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/src/geometry/ray2.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 
@@ -11,7 +13,7 @@ void main() {
   runApp(GameWidget(game: BeeHoney()));
 }
 
-class BeeHoney extends FlameGame with KeyboardEvents {
+class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
   // SpriteComponent -> Definir Posição Cor tipo imagem tamanho
   Bg bg = Bg();
   Bg bg2 = Bg();
@@ -32,20 +34,23 @@ class BeeHoney extends FlameGame with KeyboardEvents {
       ..sprite = await Sprite.load("bg.png")
       ..size.x = 500 // tamanho em X
       ..size.y = 900 //tamanho em Y
-      ..position = Vector2(0, -900); //
+      ..position = Vector2(0, -900)
+      ..add(RectangleHitbox());
 
     bee
       ..sprite = await Sprite.load("bee1.png")
       ..size = Vector2.all(50) //---> Define tamanho
       ..position = Vector2(250, 800)
-      ..anchor = Anchor.center; // Define ela no ponto central
+      ..anchor = Anchor.center // Define ela no ponto central
+      ..add(RectangleHitbox());
 
     add(bee);
     spider
       ..sprite = await Sprite.load("spider1.png")
       ..size = Vector2.all(80)
       ..position = Vector2(250, 500)
-      ..anchor = Anchor.center;
+      ..anchor = Anchor.center
+      ..add(RectangleHitbox());
 
     add(spider);
 
@@ -53,8 +58,8 @@ class BeeHoney extends FlameGame with KeyboardEvents {
       ..sprite = await Sprite.load("florwer1.png")
       ..size = Vector2.all(30)
       ..position = Vector2(200, 400)
-      ..anchor = Anchor.center;
-
+      ..anchor = Anchor.center
+      ..add(RectangleHitbox());
     add(flower);
 
     return super.onLoad();
@@ -92,7 +97,7 @@ class BeeHoney extends FlameGame with KeyboardEvents {
   }
 }
 
-class Obj extends SpriteComponent {
+class Obj extends SpriteComponent with CollisionCallbacks {
   int timer = 0;
   int img = 1;
   String name = "";
@@ -128,6 +133,7 @@ class Bg extends SpriteComponent {
 class Bee extends Obj {
   bool right = false;
   bool left = false;
+
   move(dt, speed) {
     if (right) {
       if (x <= 475) {
@@ -138,6 +144,17 @@ class Bee extends Obj {
       if (x >= 25) {
         x -= speed;
       }
+    }
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    // TODO: implement onCollision
+    super.onCollision(intersectionPoints, other);
+    if (other is Spider) {
+      other.position.y = -100.0;
+    } else if (other is Flower) {
+      other.position.y = -100.0;
     }
   }
 }
@@ -153,6 +170,16 @@ class Spider extends Obj {
       x += 2;
     } else if (x > bee.x) {
       x -= 2;
+    }
+  }
+
+  @override
+  void onCollision(Set<Vector2> intersectionPoints, PositionComponent other) {
+    // TODO: implement onCollision
+    super.onCollision(intersectionPoints, other);
+    if (other is Spider) {
+      print('teste');
+      other.position.y = -100.0;
     }
   }
 }
