@@ -2,6 +2,9 @@ import 'package:flame/collisions.dart';
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
+import 'package:flame/palette.dart';
+import 'package:flametest/game/util/utils.dart';
+import 'package:flametest/objs/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -17,6 +20,10 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
   Bee bee = Bee();
   Spider spider = Spider();
   Flower flower = Flower();
+
+  GameText textScore =
+      GameText('Score: $score', 10, 10, BasicPalette.black.color);
+
   @override
   Future<void>? onLoad() async {
     bg
@@ -25,8 +32,6 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
       ..size.y = 900 //tamanho em Y
       ..position = Vector2(0, 0); // Posicao em X | Y
 
-    add(bg); // Adicione o objeto na tela
-    add(bg2);
     bg2
       ..sprite = await Sprite.load("bg.png")
       ..size.x = 500 // tamanho em X
@@ -41,7 +46,6 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
       ..anchor = Anchor.center // Define ela no ponto central
       ..add(RectangleHitbox());
 
-    add(bee);
     spider
       ..sprite = await Sprite.load("spider1.png")
       ..size = Vector2.all(80)
@@ -49,16 +53,19 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
       ..anchor = Anchor.center
       ..add(RectangleHitbox());
 
-    add(spider);
-
     flower
       ..sprite = await Sprite.load("florwer1.png")
       ..size = Vector2.all(30)
       ..position = Vector2(200, 400)
       ..anchor = Anchor.center
       ..add(RectangleHitbox());
-    add(flower);
 
+    add(bg); // Adicione o objeto na tela
+    add(bg2);
+    add(bee);
+    add(spider);
+    add(flower);
+    add(textScore);
     return super.onLoad();
   }
 
@@ -76,6 +83,9 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
 
     flower.move(dt, 110);
     flower.animation(8, 2, 'florwer');
+
+    textScore.text = textPts + score.toString();
+
     super.update(dt);
   }
 
