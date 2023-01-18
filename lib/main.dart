@@ -1,3 +1,6 @@
+import 'dart:ffi';
+import 'dart:math';
+
 import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
@@ -14,6 +17,7 @@ class BeeHoney extends FlameGame with KeyboardEvents {
   Bg bg2 = Bg();
   Bee bee = Bee();
   Spider spider = Spider();
+  Flower flower = Flower();
   @override
   Future<void>? onLoad() async {
     bg
@@ -44,6 +48,15 @@ class BeeHoney extends FlameGame with KeyboardEvents {
       ..anchor = Anchor.center;
 
     add(spider);
+
+    flower
+      ..sprite = await Sprite.load("florwer1.png")
+      ..size = Vector2.all(30)
+      ..position = Vector2(200, 400)
+      ..anchor = Anchor.center;
+
+    add(flower);
+
     return super.onLoad();
   }
 
@@ -59,6 +72,8 @@ class BeeHoney extends FlameGame with KeyboardEvents {
     spider.animation(8, 4, 'spider');
     spider.move(dt, bee);
 
+    flower.move(dt, 110);
+    flower.animation(8, 2, 'florwer');
     super.update(dt);
   }
 
@@ -81,6 +96,13 @@ class Obj extends SpriteComponent {
   int timer = 0;
   int img = 1;
   String name = "";
+
+  random(min, max) {
+    var r = Random();
+
+    return min + r.nextInt(max - min);
+  }
+
   animation(time, spritelimit, name) async {
     timer += 1;
     if (timer > time) {
@@ -131,6 +153,16 @@ class Spider extends Obj {
       x += 2;
     } else if (x > bee.x) {
       x -= 2;
+    }
+  }
+}
+
+class Flower extends Obj {
+  move(dt, speed) {
+    y += speed * dt;
+    if (y > 900) {
+      y = -50;
+      x = random(50, 500).toDouble();
     }
   }
 }
