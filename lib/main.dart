@@ -155,6 +155,7 @@ class Bee extends Obj {
       other.position.y = -100.0;
     } else if (other is Flower) {
       other.position.y = -100.0;
+      other.position.x = random(50, 500).toDouble();
     }
   }
 }
