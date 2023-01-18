@@ -1,12 +1,14 @@
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/services.dart';
 
 void main() {
   runApp(GameWidget(game: BeeHoney()));
 }
 
-class BeeHoney extends FlameGame {
+class BeeHoney extends FlameGame with KeyboardEvents {
   // SpriteComponent -> Definir Posição Cor tipo imagem tamanho
   Bg bg = Bg();
   Bg bg2 = Bg();
@@ -43,6 +45,19 @@ class BeeHoney extends FlameGame {
     bg.move(dt, 100, 900, 0.0);
     bg2.move(dt, 100, 0, -900.0);
     super.update(dt);
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+      RawKeyEvent event, Set<LogicalKeyboardKey> keysPressed) {
+    if (event.data.keyLabel == "a") {
+      bee.x -= 1;
+    } else if (event.data.keyLabel == "d") {
+      bee.x += 1;
+    } else if (event.data.keyLabel == "s") {
+      //
+    }
+    return super.onKeyEvent(event, keysPressed);
   }
 }
 
