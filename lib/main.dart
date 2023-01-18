@@ -32,13 +32,14 @@ class BeeHoney extends FlameGame {
 
   @override
   void update(double dt) {
-    bg.move();
+    //delta time- independente do nivel de processamento
+    bg.move(dt);
     super.update(dt);
   }
 }
 
 class Bg extends SpriteComponent {
-  move() {
-    y += 1; //Pega posicao eixo y adiciona 1
+  move(dt) {
+    y += 100 * dt; //Pega posicao eixo y adiciona 1
   }
 }
