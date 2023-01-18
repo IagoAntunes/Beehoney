@@ -27,6 +27,9 @@ class Bee extends Obj {
     super.onCollision(intersectionPoints, other);
     if (other is Spider) {
       other.position.y = -100.0;
+      if (lifes > 0) {
+        lifes--;
+      }
     } else if (other is Flower) {
       other.position.y = -100.0;
       other.position.x = random(50, 500).toDouble();

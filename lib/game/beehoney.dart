@@ -23,6 +23,8 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
 
   GameText textScore =
       GameText('Score: $score', 10, 10, BasicPalette.black.color);
+  GameText textLifes =
+      GameText('Lifes: $score', 400, 10, BasicPalette.black.color);
 
   @override
   Future<void>? onLoad() async {
@@ -66,6 +68,7 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
     add(spider);
     add(flower);
     add(textScore);
+    add(textLifes);
     return super.onLoad();
   }
 
@@ -85,7 +88,7 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
     flower.animation(8, 2, 'florwer');
 
     textScore.text = textPts + score.toString();
-
+    textLifes.text = lifesTxt + lifes.toString();
     super.update(dt);
   }
 
