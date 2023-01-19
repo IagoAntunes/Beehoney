@@ -3,8 +3,6 @@ import 'package:flame/components.dart';
 import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flame/palette.dart';
-import 'package:flametest/game/util/utils.dart';
-import 'package:flametest/objs/text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -12,6 +10,8 @@ import '../objs/bee.dart';
 import '../objs/bg.dart';
 import '../objs/flower.dart';
 import '../objs/spider.dart';
+import '../objs/text.dart';
+import 'util/utils.dart';
 
 class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
   // SpriteComponent -> Definir Posição Cor tipo imagem tamanho
@@ -22,9 +22,9 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
   Flower flower = Flower();
 
   GameText textScore =
-      GameText('Score: $score', 10, 10, BasicPalette.black.color);
+      GameText('Score: $score', 10, 10, BasicPalette.black.color, 20);
   GameText textLifes =
-      GameText('Lifes: $score', 400, 10, BasicPalette.black.color);
+      GameText('Lifes: $score', 400, 10, BasicPalette.black.color, 20);
 
   @override
   Future<void>? onLoad() async {
@@ -89,6 +89,13 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
 
     textScore.text = textPts + score.toString();
     textLifes.text = lifesTxt + lifes.toString();
+
+    if (gameOver) {
+      pauseEngine();
+      overlays.add('GameOver');
+      //resumeEngine();
+    }
+
     super.update(dt);
   }
 

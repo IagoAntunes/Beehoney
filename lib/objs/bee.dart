@@ -1,14 +1,13 @@
 import 'package:flame/components.dart';
-import 'package:flametest/objs/flower.dart';
-import 'package:flametest/objs/spider.dart';
 
 import '../game/util/utils.dart';
+import 'flower.dart';
 import 'obj.dart';
+import 'spider.dart';
 
 class Bee extends Obj {
   bool right = false;
   bool left = false;
-
   move(dt, speed) {
     if (right) {
       if (x <= 475) {
@@ -29,6 +28,9 @@ class Bee extends Obj {
       other.position.y = -100.0;
       if (lifes > 0) {
         lifes--;
+      }
+      if (lifes <= 0) {
+        gameOver = true;
       }
     } else if (other is Flower) {
       other.position.y = -100.0;
