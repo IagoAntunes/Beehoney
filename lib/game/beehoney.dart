@@ -62,7 +62,8 @@ class BeeHoney extends FlameGame with HasCollisionDetection, KeyboardEvents {
       ..anchor = Anchor.center
       ..add(RectangleHitbox());
 
-    add(bg); // Adicione o objeto na tela
+    // Adicione o objeto na tela
+    add(bg);
     add(bg2);
     add(bee);
     add(spider);
